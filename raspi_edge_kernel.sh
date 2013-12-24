@@ -7,6 +7,8 @@
 apt-get -y update && apt-get -y upgrade
 apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential gcc-arm-linux-gnueabi bc netpbm
 
+
+
 # Clone Stuff
 mkdir ~/rpi_kernel_10
 cd ~/rpi_kernel_10
