@@ -37,6 +37,7 @@ ppmquant 224 logo.ppm >logo_224.tmp
 pnmnoraw logo_224.tmp > logo_linux_clut224.ppm
 
 # Make Kernel
+export CROSS_COMPILER_PREFIX="~/rpi_kernel/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
 export CROSS_COMPILER_PREFIX="~/rpi_kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
 cd ~/rpi_kernel/linux
 make mrproper
