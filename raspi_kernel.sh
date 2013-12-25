@@ -5,28 +5,37 @@
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx # gcc-arm-linux-gnueabi
+mkdir -p ~/rpi_kernel
 
-#gcc-arm-linux-gnueabi
+# Clone & Download Stuff
 
-# Clone Stuff
-mkdir ~/rpi_kernel
 cd ~/rpi_kernel
 wget -O raspbian.zip http://downloads.raspberrypi.org/raspbian_latest
-git clone https://github.com/raspberrypi/tools.git #coffee time
-git clone https://github.com/raspberrypi/linux.git #coffee time
+git clone https://github.com/raspberrypi/tools.git
+git clone https://github.com/raspberrypi/linux.git
+git clone https://github.com/raspberrypi/firmware.git
+
+# Mount target image
+cd ~/rpi_kernel
+mkdir -p sdb1 sdb2
+unzip raspbian.zip
+kpartx -av 2013-12-20-wheezy-raspbian.img # filename (date) might be different
+mount /dev/mapper/loop0p1 sdb1
+mount /dev/mapper/loop0p2 sdb2
+
+#nah...
 cd ~/rpi_kernel/linux/.git
 git branch -a
 cd ~/rpi_kernel/linux
-git checkout -t -b remotes/origin/rpi-3.10.y
+git checkout -t -b remotes/origin/rpi-3.10.y # sure?
 git pull
-cd ~/rpi_kernel
-git clone https://github.com/raspberrypi/firmware.git #coffee time
 cd ~/rpi_kernel/firmware/.git
 git branch -a
 cd ~/rpi_kernel/firmware
-git checkout -t -b next remotes/origin/next
+git checkout -t -b next remotes/origin/next # sure?
 git pull
+#/nah...
 
 #logo
 cd ~/rpi_kernel/linux/drivers/video/logo
@@ -46,6 +55,7 @@ mkdir -p ../kernel
 # ./arch/arm/configs/bcmrpi_cutdown_defconfig
 # ./arch/arm/configs/bcmrpi_quick_defconfig
 make O=../kernel/ ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- bcmrpi_defconfig
+# better pull a config of a raspbian image!!!
 make O=../kernel/ ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- menuconfig
 #xconfig ??
 #Device Drivers->
