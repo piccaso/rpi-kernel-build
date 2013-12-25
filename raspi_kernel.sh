@@ -5,37 +5,38 @@
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential gcc-arm-linux-gnueabi bc netpbm
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm
 
-
+#gcc-arm-linux-gnueabi
 
 # Clone Stuff
-mkdir ~/rpi_kernel_10
-cd ~/rpi_kernel_10
+mkdir ~/rpi_kernel
+cd ~/rpi_kernel
+wget -O raspbian.zip http://downloads.raspberrypi.org/raspbian_latest
 git clone https://github.com/raspberrypi/tools.git #coffee time
 git clone https://github.com/raspberrypi/linux.git #coffee time
-cd ~/rpi_kernel_10/linux/.git
+cd ~/rpi_kernel/linux/.git
 git branch -a
-cd ~/rpi_kernel_10/linux
+cd ~/rpi_kernel/linux
 git checkout -t -b remotes/origin/rpi-3.10.y
 git pull
-cd ~/rpi_kernel_10
+cd ~/rpi_kernel
 git clone https://github.com/raspberrypi/firmware.git #coffee time
-cd ~/rpi_kernel_10/firmware/.git
+cd ~/rpi_kernel/firmware/.git
 git branch -a
-cd ~/rpi_kernel_10/firmware
+cd ~/rpi_kernel/firmware
 git checkout -t -b next remotes/origin/next
 git pull
 
 #logo
-cd ~/rpi_kernel_10/linux/drivers/video/logo
+cd ~/rpi_kernel/linux/drivers/video/logo
 wget -O logo.jpg https://www.dropbox.com/s/fb0bzhpjwgpdthb/laserbox_logo_white_padding.jpg
 jpegtopnm logo.jpg >logo.ppm
 ppmquant 224 logo.ppm >logo_224.tmp
 pnmnoraw logo_224.tmp > logo_linux_clut224.ppm
 
 # Make Kernel
-cd ~/rpi_kernel_10/linux
+cd ~/rpi_kernel/linux
 make mrproper
 mkdir -p ../kernel
 # Kernel Types
@@ -64,7 +65,7 @@ cd ../tools/mkimage
 cd ../../
 
 # Make Modules
-cd ~/rpi_kernel_10/kernel
+cd ~/rpi_kernel/kernel
 mkdir -p ../modules/
 
 # prepare for transfer
@@ -72,15 +73,15 @@ cd ~
 mkdir sdb1 sdb2
 
 # boot partition
-#replace /sdb1/boot/bootcode.bin with rpi_kernel_10/firmware/boot/bootcode.bin
+#replace /sdb1/boot/bootcode.bin with rpi_kernel/firmware/boot/bootcode.bin
 rm ~/sdb1/bootcode.bin
-cp ~/rpi_kernel_10/firmware/boot/bootcode.bin ~/sdb1/
+cp ~/rpi_kernel/firmware/boot/bootcode.bin ~/sdb1/
 #replace /sdb1/boot/kernel.img with the previously created kernel image
 rm ~/sdb1/kernel.img
-cp ~/rpi_kernel_10/tools/mkimage/kernel.img ~/sdb1/
-#replace /sdb1/boot/start.elf with rpi_kernel_10/firmware/boot/start.elf
+cp ~/rpi_kernel/tools/mkimage/kernel.img ~/sdb1/
+#replace /sdb1/boot/start.elf with rpi_kernel/firmware/boot/start.elf
 rm ~/sdb1/start.elf
-cp ~/rpi_kernel_10/firmware/boot/start.elf ~/sdb1/
+cp ~/rpi_kernel/firmware/boot/start.elf ~/sdb1/
 
 # root partition
 #replace /sdb2/lib/firmware with <modules_builded_above_folder>/lib/firmware
@@ -89,37 +90,13 @@ mkdir -p ~/sdb2/lib/modules
 mkdir -p ~/sdb2/opt/vc
 
 rm -rf ~/sdb2/lib/firmware/
-cp -a ~/rpi_kernel_10/modules/lib/firmware/ ~/sdb2/lib/
+cp -a ~/rpi_kernel/modules/lib/firmware/ ~/sdb2/lib/
 #replace /sdb2/lib/modules with <modules_builded_above_folder>/lib/modules
 rm -rf ~/sdb2/lib/modules/
-cp -a ~/rpi_kernel_10/modules/lib/modules/ ~/sdb2/lib/
+cp -a ~/rpi_kernel/modules/lib/modules/ ~/sdb2/lib/
 #replace /sdb2/opt/vc with firmware-next/hardfp/opt/vc/
 rm -rf ~/sdb2/opt/vc
-cp -a ~/rpi_kernel_10/firmware/hardfp/opt/vc/ ~/sdb2/opt/
+cp -a ~/rpi_kernel/firmware/hardfp/opt/vc/ ~/sdb2/opt/
 
 cd ~
 tar -zcvf newkernel.tgz sdb1 sdb2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
