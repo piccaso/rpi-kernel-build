@@ -6,40 +6,40 @@
 
 apt-get -y update && apt-get -y upgrade
 apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx # gcc-arm-linux-gnueabi
-mkdir -p ~/raspi-kernel
+mkdir -p /usr/src/raspi-kernel
 
 # Clone & Download Stuff
 
-cd ~/raspi-kernel
+cd /usr/src/raspi-kernel
 wget -O raspbian.zip http://downloads.raspberrypi.org/raspbian_latest
 git clone https://github.com/raspberrypi/tools.git
 git clone https://github.com/raspberrypi/linux.git
 git clone https://github.com/raspberrypi/firmware.git
 
 #nah...
-cd ~/raspi-kernel/linux/.git
+cd /usr/src/raspi-kernel/linux/.git
 git branch -a
-cd ~/raspi-kernel/linux
+cd /usr/src/raspi-kernel/linux
 git checkout -t -b remotes/origin/rpi-3.10.y # sure?
 git pull
-cd ~/raspi-kernel/firmware/.git
+cd /usr/src/raspi-kernel/firmware/.git
 git branch -a
-cd ~/raspi-kernel/firmware
+cd /usr/src/raspi-kernel/firmware
 git checkout -t -b next remotes/origin/next # sure?
 git pull
 #/nah...
 
 #logo
-cd ~/raspi-kernel/linux/drivers/video/logo
+cd /usr/src/raspi-kernel/linux/drivers/video/logo
 wget -O logo.jpg https://www.dropbox.com/s/fb0bzhpjwgpdthb/laserbox_logo_white_padding.jpg
 jpegtopnm logo.jpg >logo.ppm
 ppmquant 224 logo.ppm >logo_224.tmp
 pnmnoraw logo_224.tmp > logo_linux_clut224.ppm
 
 # Make Kernel
-export CROSS_COMPILER_PREFIX="~/raspi-kernel/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
-#export CROSS_COMPILER_PREFIX="~/raspi-kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
-cd ~/raspi-kernel/linux
+export CROSS_COMPILER_PREFIX="/usr/src/raspi-kernel/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
+#export CROSS_COMPILER_PREFIX="/usr/src/raspi-kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
+cd /usr/src/raspi-kernel/linux
 make mrproper
 mkdir -p ../kernel
 # Kernel Types
@@ -70,13 +70,13 @@ cd ../tools/mkimage
 ./imagetool-uncompressed.py ../../kernel/arch/arm/boot/Image
 
 # Make Modules
-cd ~/raspi-kernel/kernel
+cd /usr/src/raspi-kernel/kernel
 mkdir -p ../modules/
 make modules_install ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=../modules/
 
 
 # Mount target image
-cd ~/raspi-kernel
+cd /usr/src/raspi-kernel
 mkdir -p sdb1 sdb2
 unzip raspbian.zip
 mv *-wheezy-raspbian.img custom-wheezy-raspbian.img
@@ -85,20 +85,20 @@ mount /dev/mapper/loop0p1 sdb1
 mount /dev/mapper/loop0p2 sdb2
 
 # boot partition
-cp ~/raspi-kernel/firmware/boot/* ~/raspi-kernel/sdb1/
-cp ~/raspi-kernel/tools/mkimage/kernel.img ~/raspi-kernel/sdb1/kernel.img
+cp /usr/src/raspi-kernel/firmware/boot/* /usr/src/raspi-kernel/sdb1/
+cp /usr/src/raspi-kernel/tools/mkimage/kernel.img /usr/src/raspi-kernel/sdb1/kernel.img
 
 # root partition
-rm -r ~/raspi-kernel/sdb2/lib/firmware/
-cp -a ~/raspi-kernel/modules/lib/firmware/ ~/raspi-kernel/sdb2/lib/
+rm -r /usr/src/raspi-kernel/sdb2/lib/firmware/
+cp -a /usr/src/raspi-kernel/modules/lib/firmware/ /usr/src/raspi-kernel/sdb2/lib/
 
-rm -r ~/raspi-kernel/sdb2/lib/modules/
-cp -a ~/raspi-kernel/modules/lib/modules/ ~/raspi-kernel/sdb2/lib/
+rm -r /usr/src/raspi-kernel/sdb2/lib/modules/
+cp -a /usr/src/raspi-kernel/modules/lib/modules/ /usr/src/raspi-kernel/sdb2/lib/
 
-rm -r ~/raspi-kernel/sdb2/opt/vc
-cp -a ~/raspi-kernel/firmware/hardfp/opt/vc/ ~/raspi-kernel/sdb2/opt/
+rm -r /usr/src/raspi-kernel/sdb2/opt/vc
+cp -a /usr/src/raspi-kernel/firmware/hardfp/opt/vc/ /usr/src/raspi-kernel/sdb2/opt/
 
-cd ~/raspi-kernel
+cd /usr/src/raspi-kernel
 sync
 umount sdb1
 umount sdb2
