@@ -5,7 +5,7 @@
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx # gcc-arm-linux-gnueabi
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv # gcc-arm-linux-gnueabi
 mkdir -p /usr/src/raspi-kernel
 
 # Clone & Download Stuff
@@ -85,21 +85,25 @@ mount /dev/mapper/loop0p1 sdb1
 mount /dev/mapper/loop0p2 sdb2
 
 # boot partition
-cp /usr/src/raspi-kernel/firmware/boot/* /usr/src/raspi-kernel/sdb1/
-cp /usr/src/raspi-kernel/tools/mkimage/kernel.img /usr/src/raspi-kernel/sdb1/kernel.img
+cp -va /usr/src/raspi-kernel/firmware/boot/* /usr/src/raspi-kernel/sdb1/
+cp -va /usr/src/raspi-kernel/tools/mkimage/kernel.img /usr/src/raspi-kernel/sdb1/kernel.img
 
 # root partition
-rm -r /usr/src/raspi-kernel/sdb2/lib/firmware/
-cp -a /usr/src/raspi-kernel/modules/lib/firmware/ /usr/src/raspi-kernel/sdb2/lib/
+rm -vr /usr/src/raspi-kernel/sdb2/lib/firmware/
+cp -va /usr/src/raspi-kernel/modules/lib/firmware/ /usr/src/raspi-kernel/sdb2/lib/
 
-rm -r /usr/src/raspi-kernel/sdb2/lib/modules/
-cp -a /usr/src/raspi-kernel/modules/lib/modules/ /usr/src/raspi-kernel/sdb2/lib/
+rm -vr /usr/src/raspi-kernel/sdb2/lib/modules/
+cp -va /usr/src/raspi-kernel/modules/lib/modules/ /usr/src/raspi-kernel/sdb2/lib/
 
-rm -r /usr/src/raspi-kernel/sdb2/opt/vc
-cp -a /usr/src/raspi-kernel/firmware/hardfp/opt/vc/ /usr/src/raspi-kernel/sdb2/opt/
+rm -vr /usr/src/raspi-kernel/sdb2/opt/vc
+cp -va /usr/src/raspi-kernel/firmware/hardfp/opt/vc/ /usr/src/raspi-kernel/sdb2/opt/
 
 cd /usr/src/raspi-kernel
 sync
 umount sdb1
 umount sdb2
 kpartx -dv custom-wheezy-raspbian.img
+
+# write image to /dev/mmcblk0
+cd /usr/src/raspi-kernel
+pv -tpreb custom-wheezy-raspbian.img | dd of=/dev/mmcblk0 bs=1M
