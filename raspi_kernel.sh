@@ -38,7 +38,7 @@ pnmnoraw logo_224.tmp > logo_linux_clut224.ppm
 
 # Make Kernel
 export CROSS_COMPILER_PREFIX="~/rpi_kernel/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-"
-export CROSS_COMPILER_PREFIX="~/rpi_kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
+#export CROSS_COMPILER_PREFIX="~/rpi_kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
 cd ~/rpi_kernel/linux
 make mrproper
 mkdir -p ../kernel
@@ -63,10 +63,11 @@ make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} menuconfig
 #[ ] Standard black and white Linux logo
 #[ ] Standard 16-color Linux logo
 #[*] Standard 224-color Linux logo
-make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} -k -j3 #coffee time
+
+# -k = keep going, -j2 = 2 async jobs
+make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} -k -j2
 cd ../tools/mkimage
 ./imagetool-uncompressed.py ../../kernel/arch/arm/boot/Image
-cd ../../
 
 # Make Modules
 cd ~/rpi_kernel/kernel
