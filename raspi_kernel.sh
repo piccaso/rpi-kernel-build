@@ -1,4 +1,4 @@
-# on Ubuntu 12.04 as root
+# on Ubuntu 12.04 / Debian wheezy as root
 #
 # http://www.nico-maas.de/wordpress/?p=808
 # https://mentorlinux.wordpress.com/2013/02/25/raspberry-pi-linux-kernel-cross-compilation/
