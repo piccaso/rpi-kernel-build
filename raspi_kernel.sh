@@ -17,16 +17,16 @@ git clone https://github.com/raspberrypi/linux.git
 git clone https://github.com/raspberrypi/firmware.git
 
 #nah...
-cd /usr/src/raspi-kernel/linux/.git
-git branch -a
-cd /usr/src/raspi-kernel/linux
-git checkout -t -b remotes/origin/rpi-3.10.y # sure?
-git pull
-cd /usr/src/raspi-kernel/firmware/.git
-git branch -a
-cd /usr/src/raspi-kernel/firmware
-git checkout -t -b next remotes/origin/next # sure?
-git pull
+#cd /usr/src/raspi-kernel/linux/.git
+#git branch -a
+#cd /usr/src/raspi-kernel/linux
+#git checkout -t -b remotes/origin/rpi-3.10.y # sure?
+#git pull
+#cd /usr/src/raspi-kernel/firmware/.git
+#git branch -a
+#cd /usr/src/raspi-kernel/firmware
+#git checkout -t -b next remotes/origin/next # sure?
+#git pull
 #/nah...
 
 #logo
