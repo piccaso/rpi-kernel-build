@@ -5,7 +5,10 @@
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv # gcc-arm-linux-gnueabi
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python
+#on 64bit os
+apt-get -y install libc6-i386 lib32z1 lib32stdc++6
+
 mkdir -p /usr/src/raspi-kernel
 
 # Clone & Download Stuff
