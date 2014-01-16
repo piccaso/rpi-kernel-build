@@ -5,7 +5,7 @@
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree bzip2
 #on 64bit os
 apt-get -y install libc6-i386 lib32z1 lib32stdc++6
 
@@ -116,10 +116,14 @@ sync
 umount sdb1
 umount sdb2
 
-#optional, zero empty space of root partition
+#optional, zero empty space of root partition (for better compression)
 zerofree -v /dev/mapper/loop0p2
 
 kpartx -dv custom-wheezy-raspbian.img
+
+# compress image
+cd /usr/src/raspi-kernel
+pv -tpreb custom-wheezy-raspbian.img | bzip2 --best > custom-wheezy-raspbian.img.bzip2
 
 # write image to /dev/mmcblk0
 cd /usr/src/raspi-kernel
