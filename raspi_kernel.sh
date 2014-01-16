@@ -12,12 +12,13 @@ apt-get -y install libc6-i386 lib32z1 lib32stdc++6
 mkdir -p /usr/src/raspi-kernel
 
 # Clone & Download Stuff
-
+#
 cd /usr/src/raspi-kernel
-wget -O raspbian.zip http://downloads.raspberrypi.org/raspbian_latest
-git clone https://github.com/raspberrypi/tools.git
-git clone https://github.com/raspberrypi/linux.git
-git clone https://github.com/raspberrypi/firmware.git
+wget -O raspbian.zip http://downloads.raspberrypi.org/raspbian_latest && unzip raspbian.zip
+git clone -- https://github.com/raspberrypi/tools.git
+git clone -- https://github.com/raspberrypi/linux.git
+git clone -- https://github.com/raspberrypi/firmware.git
+git clone -- https://github.com/robopeak/rpusbdisp.git robopeak-rpi-usb-display-mod
 
 #nah...
 #cd /usr/src/raspi-kernel/linux/.git
@@ -73,19 +74,28 @@ make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} -k -j2
 cd ../tools/mkimage
 ./imagetool-uncompressed.py ../../kernel/arch/arm/boot/Image
 
-# Make Modules
+# Kernel Modules
 cd /usr/src/raspi-kernel/kernel
 test -d ../modules && rm -r ../modules
 mkdir -p ../modules/
 make modules_install ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=../modules/
 
+# Make robopeak kernel module
+cd /usr/src/raspi-kernel/
+#RPI_UNAME_R=`ls modules/lib/modules` #quirks...
+cd robopeak-rpi-usb-display-mod/drivers/linux-driver
+# make clean seems broken, so:
+git clean -fdx; git reset --hard
+make KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX}
+make modules_install KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=/usr/src/raspi-kernel/modules/
+
 
 # Mount target image
 cd /usr/src/raspi-kernel
 mkdir -p sdb1 sdb2
-unzip raspbian.zip
 mv *-wheezy-raspbian.img custom-wheezy-raspbian.img
 kpartx -av custom-wheezy-raspbian.img
+# /dev names might vary... loop<X>p<N>
 mount /dev/mapper/loop0p1 sdb1
 mount /dev/mapper/loop0p2 sdb2
 
