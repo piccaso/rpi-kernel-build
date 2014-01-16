@@ -44,6 +44,7 @@ export CROSS_COMPILER_PREFIX="/usr/src/raspi-kernel/tools/arm-bcm2708/gcc-linaro
 #export CROSS_COMPILER_PREFIX="/usr/src/raspi-kernel/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-"
 cd /usr/src/raspi-kernel/linux
 make mrproper
+test -d ../kernel && rm -r ../kernel
 mkdir -p ../kernel
 # Kernel Types
 # find . -name *bcmrpi*config -print
@@ -74,6 +75,7 @@ cd ../tools/mkimage
 
 # Make Modules
 cd /usr/src/raspi-kernel/kernel
+test -d ../modules && rm -r ../modules
 mkdir -p ../modules/
 make modules_install ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=../modules/
 
