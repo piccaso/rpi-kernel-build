@@ -1,11 +1,11 @@
-# on Ubuntu 12.04 / Debian wheezy as root
+# on Debian wheezy as root
 #
 # http://www.nico-maas.de/wordpress/?p=808
 # https://mentorlinux.wordpress.com/2013/02/25/raspberry-pi-linux-kernel-cross-compilation/
 # http://www.rasplay.org/?p=6371
 
 apt-get -y update && apt-get -y upgrade
-apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python
+apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree
 #on 64bit os
 apt-get -y install libc6-i386 lib32z1 lib32stdc++6
 
@@ -105,18 +105,20 @@ cp -va /usr/src/raspi-kernel/tools/mkimage/kernel.img /usr/src/raspi-kernel/sdb1
 
 # root partition
 rm -vr /usr/src/raspi-kernel/sdb2/lib/firmware/
-cp -va /usr/src/raspi-kernel/modules/lib/firmware/ /usr/src/raspi-kernel/sdb2/lib/
-
 rm -vr /usr/src/raspi-kernel/sdb2/lib/modules/
-cp -va /usr/src/raspi-kernel/modules/lib/modules/ /usr/src/raspi-kernel/sdb2/lib/
+cp -va /usr/src/raspi-kernel/modules/lib/* /usr/src/raspi-kernel/sdb2/lib/
 
 rm -vr /usr/src/raspi-kernel/sdb2/opt/vc
-cp -va /usr/src/raspi-kernel/firmware/hardfp/opt/vc/ /usr/src/raspi-kernel/sdb2/opt/
+cp -va /usr/src/raspi-kernel/firmware/hardfp/opt/vc /usr/src/raspi-kernel/sdb2/opt/
 
 cd /usr/src/raspi-kernel
 sync
 umount sdb1
 umount sdb2
+
+#optional, zero empty space of root partition
+zerofree -v /dev/mapper/loop0p2
+
 kpartx -dv custom-wheezy-raspbian.img
 
 # write image to /dev/mmcblk0
