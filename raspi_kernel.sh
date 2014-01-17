@@ -119,6 +119,10 @@ umount sdb2
 #optional, zero empty space of root partition (for better compression)
 zerofree -v /dev/mapper/loop0p2
 
+#maybe remove journal?
+#http://askubuntu.com/questions/76913/how-can-i-check-if-a-particular-partition-ext4-is-journaled
+#https://wiki.ubuntu.com/MagicFab/SSDchecklist
+
 kpartx -dv custom-wheezy-raspbian.img
 
 # compress image
