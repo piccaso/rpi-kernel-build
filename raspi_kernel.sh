@@ -55,19 +55,13 @@ mkdir -p ../kernel
 # ./arch/arm/configs/bcmrpi_quick_defconfig
 make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} bcmrpi_defconfig
 # better pull a config of a raspbian image!!!
-make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} menuconfig
-#xconfig ??
-#Device Drivers->
-#Input Device Support->
-#TouchScreens->USB Touchscreen Driver (Build it into or as module, check if eGalax here!)
-#
-#. Device Drivers —>
-#2. Graphics support —>
-#3. [*] Bootup logo —>
-#4. — Bootup logo
-#[ ] Standard black and white Linux logo
-#[ ] Standard 16-color Linux logo
-#[*] Standard 224-color Linux logo
+
+make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} menuconfig # xconf
+
+##robopeak display support:
+# Select the Displaylink display driver 
+# ( Device Drivers-> Graphics support -> Support for frame buffer devices-> Displaylink USB Framebuffer support) 
+# as an external module.
 
 # -k = keep going, -j2 = 2 async jobs
 make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} -k -j2
