@@ -132,6 +132,6 @@ kpartx -dv custom-wheezy-raspbian.img
 cd /usr/src/raspi-kernel
 pv -tpreb custom-wheezy-raspbian.img | bzip2 --best > custom-wheezy-raspbian.img.bzip2
 
-# write image to /dev/mmcblk0
+# write image to /dev/sdb (!if this device is the sdcard!)
 cd /usr/src/raspi-kernel
-pv -tpreb custom-wheezy-raspbian.img | dd of=/dev/mmcblk0 bs=1M
+pv -tpreb custom-wheezy-raspbian.img | dd of=/dev/sdb bs=1M
