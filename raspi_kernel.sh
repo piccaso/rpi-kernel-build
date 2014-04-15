@@ -80,15 +80,18 @@ test -d ../modules && rm -r ../modules
 mkdir -p ../modules/
 make modules_install ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=../modules/
 
-# Make robopeak kernel module
-cd /usr/src/raspi-kernel/
-#RPI_UNAME_R=`ls modules/lib/modules` #quirks...
-cd robopeak-rpi-usb-display-mod/drivers/linux-driver
-# make clean seems broken, so:
-git clean -fdx; git reset --hard
-make KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX}
-make modules_install KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=/usr/src/raspi-kernel/modules/
-
+### no longer needed??
+#
+## Make robopeak kernel module
+#cd /usr/src/raspi-kernel/
+##RPI_UNAME_R=`ls modules/lib/modules` #quirks...
+#cd robopeak-rpi-usb-display-mod/drivers/linux-driver
+## make clean seems broken, so:
+#git clean -fdx; git reset --hard
+#make KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX}
+#make modules_install KERNEL_SOURCE_DIR=../../../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} INSTALL_MOD_PATH=/usr/src/raspi-kernel/modules/
+#
+### ??
 
 # Mount target image
 cd /usr/src/raspi-kernel
