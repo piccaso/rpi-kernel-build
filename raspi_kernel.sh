@@ -54,7 +54,9 @@ mkdir -p ../kernel
 # ./arch/arm/configs/bcmrpi_cutdown_defconfig
 # ./arch/arm/configs/bcmrpi_quick_defconfig
 make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} bcmrpi_defconfig
+
 # better pull a config of a raspbian image!!!
+# like: wget -O ../kernel/.config https://dl.dropboxusercontent.com/u/129396356/2014-01-07-wheezy-raspbian_kernel.config
 
 make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} menuconfig # xconf
 
@@ -62,6 +64,10 @@ make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} menuconfig # x
 # Select the Displaylink display driver 
 # ( Device Drivers-> Graphics support -> Support for frame buffer devices-> Displaylink USB Framebuffer support) 
 # as an external module.
+# And Robopeak as module or
+
+##for robopeak and displaylink:
+wget -O ../kernel/.config https://dl.dropboxusercontent.com/u/129396356/2014-01-07-wheezy-raspbian_kernel_robopeak_displaylink.config
 
 # -k = keep going, -j2 = 2 async jobs
 make O=../kernel/ ARCH=arm CROSS_COMPILE=${CROSS_COMPILER_PREFIX} -k -j2
