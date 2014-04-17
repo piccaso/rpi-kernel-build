@@ -143,3 +143,6 @@ pv -tpreb custom-wheezy-raspbian.img | bzip2 --best > custom-wheezy-raspbian.img
 # write image to /dev/sdb (!if this device is the sdcard!)
 cd /usr/src/raspi-kernel
 pv -tpreb custom-wheezy-raspbian.img | dd bs=16M of=/dev/sdb
+
+# to make img from sdcard
+pv /dev/sdb > rpi-2014-04-17.img
