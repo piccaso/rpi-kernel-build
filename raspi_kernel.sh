@@ -129,6 +129,9 @@ tune2fs -O ^has_journal /dev/mapper/loop0p2
 #optional, zero empty space of root partition (for better compression)
 zerofree -v /dev/mapper/loop0p2
 
+#optional, check ext4 (!contains -y and -f!)
+fsck.ext4 -Dfty -C 0 /dev/mapper/loop0p2
+
 # ext4 stuff...
 # http://askubuntu.com/questions/76913/how-can-i-check-if-a-particular-partition-ext4-is-journaled
 # https://wiki.ubuntu.com/MagicFab/SSDchecklist
