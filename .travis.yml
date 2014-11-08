@@ -1,23 +1,18 @@
 language: php
-
 php:
-  - 5.5
-
+- 5.5
 before_script:
-  - lsb_release -a
-  - uname -a
-  - env
-
+- lsb_release -a
+- uname -a
+- env
 script: sudo build.sh
-
 notifications:
   email: false
-
 deploy:
   provider: releases
-  api-key: ""
-  file: "build.tar.gz"
-  skip_cleanup: true
+  api_key:
+    secure: KUwJa4hRnSDqGUVIwqktc3ACQOF28Q8yDwJtOsd64bd1veArWhODUnlwN2BCD+74DgAkI1Wh8qH75LXeyXC4OvzbwPBz+a/O3PpHUQ6zeYDpl8xwQPbKz4MPfMedrC++DCfckPeJ4J9sqU1jzHXGPbxVRuNadYQZxoN02abWU6s=
+  file: build.tar.gz
   on:
     tags: true
     all_branches: true
