@@ -1,21 +1,20 @@
 #!/bin/bash
 
 {
+  export FIRMWARE_COMMIT=master
+  #--
   export REPO_WORKDIR=$(pwd)
   mkdir -p /tmp/rpi-kernel-$RANDOM && cd $_
   export RPI_KERNEL_WORKDIR=$(pwd)
-  export FIRMWARE_COMMIT=master
   export LOG_DIR=$RPI_KERNEL_WORKDIR/build/var/log/rpi-kernel-build
-
   rm -rf build
   mkdir -p $LOG_DIR
-  {
-    export DEBIAN_FRONTEND=noninteractive
-    apt-get -y update
-    apt-get -y install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree bzip2 libc6-i386 lib32z1 lib32stdc++6
-    wget -O robopeak.patch https://github.com/piccaso/rpi-linux-kernel/commit/d24310372556f4cc64e119f18f36b504c8c16093.patch
-    export ROBOPEAK_COMMIT=$(grep 'robopeak/rpusbdisp/commit/.*' robopeak.patch | grep -oP '[0-9a-f]{40}')
-  } 2>&1 | pv -tbi 10 -N build-deps > $LOG_DIR/build-deps.log
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get -yq update
+  apt-get -yq install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree bzip2 libc6-i386 lib32z1 lib32stdc++6
+  wget -O robopeak.patch https://github.com/piccaso/rpi-linux-kernel/commit/d24310372556f4cc64e119f18f36b504c8c16093.patch
+  export ROBOPEAK_COMMIT=$(grep 'robopeak/rpusbdisp/commit/.*' robopeak.patch | grep -oP '[0-9a-f]{40}')
+
   #-- tools/robopeak dl job (background)
   {
     wget https://github.com/raspberrypi/tools/archive/master.tar.gz -O tools.tar.gz && tar -zxvf $_ && mv tools-* tools
