@@ -14,5 +14,4 @@ deploy:
     secure: KUwJa4hRnSDqGUVIwqktc3ACQOF28Q8yDwJtOsd64bd1veArWhODUnlwN2BCD+74DgAkI1Wh8qH75LXeyXC4OvzbwPBz+a/O3PpHUQ6zeYDpl8xwQPbKz4MPfMedrC++DCfckPeJ4J9sqU1jzHXGPbxVRuNadYQZxoN02abWU6s=
   file: build.tar.gz
   on:
-    tags: true
-    all_branches: true
+    condition: true
