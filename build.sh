@@ -79,6 +79,6 @@
     cp -va $RPI_KERNEL_WORKDIR/modules/lib/* $RPI_KERNEL_WORKDIR/build/lib/
     cp -va $RPI_KERNEL_WORKDIR/firmware/hardfp/opt/vc $RPI_KERNEL_WORKDIR/build/opt/
   } 2>&1 | pv -tbi 10 -N kernel-bulid > $LOG_DIR/kernel-bulid.log
-  cd build && tar -zcf ../build.tar.gz . ; cd $RPI_KERNEL_WORKDIR
+  cd build && tar -zcf $REPO_WORKDIR/build.tar.gz . ; cd $RPI_KERNEL_WORKDIR
 
 }
