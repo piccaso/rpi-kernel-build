@@ -8,6 +8,7 @@ before_script:
 script: sudo ./build.sh
 notifications:
   email: false
+before_deploy: git fetch --tags
 deploy:
   provider: releases
   api_key:
