@@ -10,8 +10,8 @@
   rm -rf build
   mkdir -p $LOG_DIR
   export DEBIAN_FRONTEND=noninteractive
-  apt-get -yq update
-  apt-get -yq install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree bzip2 libc6-i386 lib32z1 lib32stdc++6
+  apt-get -yqq update
+  apt-get -yqq install git libncurses5 libncurses5-dev qt4-dev-tools qt4-qmake pkg-config build-essential bc netpbm kpartx pv python zerofree bzip2 libc6-i386 lib32z1 lib32stdc++6
   wget -O robopeak.patch https://github.com/piccaso/rpi-linux-kernel/commit/d24310372556f4cc64e119f18f36b504c8c16093.patch
   export ROBOPEAK_COMMIT=$(grep 'robopeak/rpusbdisp/commit/.*' robopeak.patch | grep -oP '[0-9a-f]{40}')
 
